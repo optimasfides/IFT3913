@@ -11,7 +11,7 @@ SOURCES:
 
 public class Main {
     private static String path = "javaProjects";
-    private static ArrayList<JavaFile> javaFiles = new ArrayList<JavaFile>();
+    private static ArrayList<JavaFile> javaFiles = new ArrayList<>();
 
     private static void findJavaFiles() {
         System.out.println("Searching for .java files in the directory: '"+ path + "' ...");
@@ -38,7 +38,7 @@ public class Main {
         System.out.println("CSV files created for both classes.csv and methodes.csv");
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         findJavaFiles();
         createCSVs();
     }
