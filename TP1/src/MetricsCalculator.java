@@ -1,7 +1,9 @@
+import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.io.File;
 
 /**
- * PARTIE 1
+ * PARTIE 1 et 3
  * Le classe, étant donné le fichier source d'une classe java, calcule les métriques
  */
 public class MetricsCalculator {
@@ -43,36 +45,46 @@ public class MetricsCalculator {
 
     /**
      *
-     * @param fichierJava
+     * @param file
      * @param nomClasse
      * @return  nombre de lignes de code d’une classe
      */
-    public static int classe_LOC(Scanner fichierJava, String nomClasse){
+    public static int classe_LOC(File file, String nomClasse) {
+        try {
+            Scanner scanner = new Scanner(file);
 
-        while (fichierJava.hasNextLine()){
-            String ligneDeCode = fichierJava.nextLine();
+            while (scanner.hasNextLine()){
+                String ligneDeCode = scanner.nextLine();
 
-            if (ligneDeCode.contains("class " + nomClasse)){
-                return compterLignes(fichierJava, ligneDeCode, 0, "{", "}", false);
+                if (ligneDeCode.contains("class " + nomClasse)){
+                    return compterLignes(scanner, ligneDeCode, 0, "{", "}", false);
+                }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return -1; //classe introuvable
     }
 
     /**
      *
-     * @param fichierJava
+     * @param file
      * @param nomClasse
      * @return nombre de lignes de code d’une classe qui contiennent des commentaires
      */
-    public static int classe_CLOC(Scanner fichierJava, String nomClasse){
+    public static int classe_CLOC(File file, String nomClasse) {
+        try {
+            Scanner scanner = new Scanner(file);
 
-        while (fichierJava.hasNextLine()){
-            String ligneDeCode = fichierJava.nextLine();
+            while (scanner.hasNextLine()){
+                String ligneDeCode = scanner.nextLine();
 
-            if (ligneDeCode.contains("class " + nomClasse)){
-                return compterLignes(fichierJava, ligneDeCode, 0,  "{", "}", true);
+                if (ligneDeCode.contains("class " + nomClasse)){
+                    return compterLignes(scanner, ligneDeCode, 0,  "{", "}", true);
+                }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return -1; //classe introuvable
     }

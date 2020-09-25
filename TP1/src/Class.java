@@ -11,6 +11,11 @@ public class Class {
     private int CC;
     private ArrayList<Method> methods;
 
+    public Class(String path, String className) {
+        this.path = path;
+        this.className = className;
+    }
+
     public String getPath() {
         return path;
     }

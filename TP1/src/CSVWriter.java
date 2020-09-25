@@ -1,14 +1,16 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * PARTIE 2
  * Le code prenne en entrée le chemin d'accès d'un dossier qui contient du code java et produise
  * deux fichiers au format CSV (« comma separated values», valeurs séparées par des virgules).
  */
-public class CSVCreateur {
+public class CSVWriter {
 
-    public static void creerCSV_classes()  {
+    public static void recordClasses(ArrayList<JavaFile> javaFiles)  {
         try {
             FileWriter fileWriter = new FileWriter("classes.csv");
             fileWriter.append("chemin");
@@ -22,6 +24,21 @@ public class CSVCreateur {
             fileWriter.append("classe_DC");
             fileWriter.append("\n");
 
+            javaFiles.forEach(javaFile -> {
+                javaFile.getClasses().forEach(classe ->
+                {
+                    try {
+                        fileWriter.append(String.join(",", Arrays.asList(classe.getPath(),
+                                classe.getClassName(), String.valueOf(classe.getClasse_LOC()) ,
+                                String.valueOf(classe.getClasse_CLOC()), String.valueOf(classe.getClasse_DC()))));
+                        fileWriter.append("\n");
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
+
             fileWriter.flush();
             fileWriter.close();
         } catch (IOException e) {
@@ -29,7 +46,7 @@ public class CSVCreateur {
         }
     }
 
-    public static void creerCSV_methodes()  {
+    public static void recordMethods(ArrayList<JavaFile> javaFiles)  {
         try {
             FileWriter fileWriter = new FileWriter("methodes.csv");
             fileWriter.append("chemin");
@@ -51,5 +68,4 @@ public class CSVCreateur {
             e.printStackTrace();
         }
     }
-
 }
