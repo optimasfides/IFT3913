@@ -6,8 +6,8 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException { //il faut creer new scanner pour chaque comptage de ligne
 
-        CSVWriter.creerCSV_classes();
-        CSVWriter.creerCSV_methodes();
+        CSVCreateur.creerCSV_classes();
+        CSVCreateur.creerCSV_methodes();
 
 
         File file = new File("test.java");

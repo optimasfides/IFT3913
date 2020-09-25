@@ -6,7 +6,7 @@ import java.io.IOException;
  * Le code prenne en entrée le chemin d'accès d'un dossier qui contient du code java et produise
  * deux fichiers au format CSV (« comma separated values», valeurs séparées par des virgules).
  */
-public class CSVWriter {
+public class CSVCreateur {
 
     public static void creerCSV_classes()  {
         try {
