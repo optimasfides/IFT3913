@@ -1,4 +1,7 @@
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 
@@ -159,6 +162,81 @@ public class MetricsCalculator {
             return classe_CLOC / classe_LOC;
         }
         return -1; //methode introuvable
+    }
+
+    /**
+     * Cherche tous les classes dans le fichier donnee.
+     * Traite les interfaces, les énumérations et les classes abstraites comme des classes.
+     * @param file
+     * @return cArrayList<String> classNames
+     */
+    public static ArrayList<String> findClasses(File file){
+        ArrayList<String> classNames = new ArrayList<>();
+        List<String> words;
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()){
+                String line = scanner.nextLine();
+
+                if (line.contains(" class ")){
+                    words = Arrays.asList(line.split(" "));
+                    String className = words.get(1 + words.indexOf("class"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    classNames.add(className);
+                } else if (line.contains(" enum ")) {
+                    words = Arrays.asList(line.split(" "));
+                    String className = words.get(1 + words.indexOf("enum"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    classNames.add(className);
+                } else if (line.contains(" interface ")) {
+                    words = Arrays.asList(line.split(" "));
+                    String className = words.get(1 + words.indexOf("interface"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    classNames.add(className);
+                }
+            }
+            return classNames;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return classNames;
+    }
+
+    /**
+     * Cherche tous les methodes dans le fichier donnee.
+     * @param file
+     * @return cArrayList<String> methodNames
+     */
+    public static ArrayList<String> findMethods(File file){
+        ArrayList<String> methodNames = new ArrayList<>();
+        List<String> words;
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()){
+                String line = scanner.nextLine();
+
+                if (line.contains(" class ")){
+                    words = Arrays.asList(line.split(" "));
+                    String className = words.get(1 + words.indexOf("class"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    methodNames.add(className);
+                }
+            }
+            return methodNames;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return methodNames;
     }
 }
 

@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class JavaFile {
@@ -15,25 +14,18 @@ public class JavaFile {
         setMethods();
     }
 
-    private void findClasses() {
-        // TODO
-    }
-
-    private void findMethods() {
-        // TODO
-    }
-
     private void setClasses() {
         classes = new ArrayList<Class>();
-        // TODO detect classNames auto and for each class find in file do metrics
+        ArrayList<String> classNames = MetricsCalculator.findClasses(getFile());
 
-        String className = "Main"; // temporary
-        Class classe = new Class(getPath(), className);
-        classe.setClasse_LOC(MetricsCalculator.classe_LOC(getFile(), className));
-        classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(getFile(), className));
-        classe.setClasse_DC(MetricsCalculator.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
+        classNames.forEach(className -> {
+            Class classe = new Class(getPath(), className);
+            classe.setClasse_LOC(MetricsCalculator.classe_LOC(getFile(), className));
+            classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(getFile(), className));
+            classe.setClasse_DC(MetricsCalculator.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
 
-        addClass(classe);
+            addClass(classe);
+        });
     }
 
     private void setMethods() {

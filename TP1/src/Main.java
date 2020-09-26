@@ -27,8 +27,11 @@ public class Main {
             Files.find(Paths.get(path),
                     Integer.MAX_VALUE,
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
-                    .forEach((filePath) ->
-                            javaFiles.add(new JavaFile(String.valueOf(filePath))));
+                    .forEach((filePath -> {
+                        if (String.valueOf(filePath).contains(".java")) {
+                            javaFiles.add(new JavaFile(String.valueOf(filePath)));
+                        }
+                    }));
 
         } catch (IOException e) {
             e.printStackTrace();
