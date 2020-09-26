@@ -168,7 +168,7 @@ public class MetricsCalculator {
      * Cherche tous les classes dans le fichier donnee.
      * Traite les interfaces, les énumérations et les classes abstraites comme des classes.
      * @param file
-     * @return cArrayList<String> classNames
+     * @return ArrayList<String> classNames
      */
     public static ArrayList<String> findClasses(File file){
         ArrayList<String> classNames = new ArrayList<>();

@@ -9,9 +9,9 @@ public class Method {
     private int CC;
 
     public Method(String path, String className, String methodName) {
-        this.path = path;
-        this.className = className;
-        this.methodName = methodName;
+        setPath(path);
+        setClassName(className);
+        setMethodName(methodName);
     }
 
     public String getPath() {

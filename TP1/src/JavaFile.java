@@ -8,8 +8,8 @@ public class JavaFile {
     private ArrayList<Method> methods;
 
     public JavaFile(String path) {
-        this.path = path;
-        this.file = new File(path);
+        setPath(path);
+        setFile(new File(path));
         setClasses();
         setMethods();
     }
@@ -23,6 +23,8 @@ public class JavaFile {
             classe.setClasse_LOC(MetricsCalculator.classe_LOC(getFile(), className));
             classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(getFile(), className));
             classe.setClasse_DC(MetricsCalculator.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
+            classe.setWMC(0); //TODO temporary value 0
+            classe.setClasse_BC(0); //TODO temporary value 0
 
             addClass(classe);
         });
@@ -39,6 +41,8 @@ public class JavaFile {
         method.setMethode_LOC(MetricsCalculator.methode_LOC(getFile(), methodName));
         method.setMethode_CLOC(MetricsCalculator.methode_CLOC(getFile(), methodName));
         method.setMethode_DC(MetricsCalculator.classe_DC(method.getMethode_CLOC(), method.getMethode_LOC()));
+        method.setCC(0); //TODO temporary value 0
+        method.setMethode_BC(0); //TODO temporary value 0
 
         addMethod(method);
     }

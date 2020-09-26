@@ -8,12 +8,11 @@ public class Class {
     private int classe_DC;
     private int classe_BC;
     private int WMC;
-    private int CC;
     private ArrayList<Method> methods;
 
     public Class(String path, String className) {
-        this.path = path;
-        this.className = className;
+        setPath(path);
+        setClassName(className);
     }
 
     public String getPath() {
@@ -70,14 +69,6 @@ public class Class {
 
     public void setWMC(int WMC) {
         this.WMC = WMC;
-    }
-
-    public int getCC() {
-        return CC;
-    }
-
-    public void setCC(int CC) {
-        this.CC = CC;
     }
 
     public ArrayList<Method> getMethods() {

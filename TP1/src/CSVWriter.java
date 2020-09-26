@@ -16,7 +16,8 @@ public class CSVWriter {
      * @param javaFiles
      */
     public static void recordClasses(ArrayList<JavaFile> javaFiles)  {
-        List<String> header = Arrays.asList("chemin","class", "classe_LOC", "classe_CLOC", "classe_DC");
+        List<String> header = Arrays.asList("chemin","class", "classe_LOC",
+                "classe_CLOC", "classe_DC", "WMC", "classe_BC");
 
         try {
             FileWriter fileWriter = new FileWriter("classes.csv");
@@ -31,7 +32,10 @@ public class CSVWriter {
                                 classe.getClassName(),
                                 String.valueOf(classe.getClasse_LOC()),
                                 String.valueOf(classe.getClasse_CLOC()),
-                                String.valueOf(classe.getClasse_DC()));
+                                String.valueOf(classe.getClasse_DC()),
+                                String.valueOf(classe.getWMC()),
+                                String.valueOf(classe.getClasse_BC()));
+
                         fileWriter.append(String.join(",", data));
                         fileWriter.append("\n");
 
@@ -53,7 +57,8 @@ public class CSVWriter {
      * @param javaFiles
      */
     public static void recordMethods(ArrayList<JavaFile> javaFiles)  {
-        List<String> header = Arrays.asList("chemin","class", "methode", "methode_LOC", "methode_CLOC", "methode_DC");
+        List<String> header = Arrays.asList("chemin","class", "methode", "methode_LOC",
+                "methode_CLOC", "methode_DC", "CC", "methode_BC");
 
         try {
             FileWriter fileWriter = new FileWriter("methodes.csv");
@@ -69,7 +74,10 @@ public class CSVWriter {
                                 method.getMethodName(),
                                 String.valueOf(method.getMethode_LOC()),
                                 String.valueOf(method.getMethode_CLOC()),
-                                String.valueOf(method.getMethode_DC()));
+                                String.valueOf(method.getMethode_DC()),
+                                String.valueOf(method.getCC()),
+                                String.valueOf(method.getMethode_BC()));
+
                         fileWriter.append(String.join(",", data));
                         fileWriter.append("\n");
 
