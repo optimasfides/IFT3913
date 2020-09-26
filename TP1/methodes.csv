@@ -1,1 +1,5 @@
 chemin,class,methode,methode_LOC,methode_CLOC,methode_DC
+javaProjects/test.java,Main,main,11,11,1
+javaProjects/test (copy).java,Main,main,11,11,1
+javaProjects/dd/test.java,Main,main,11,11,1
+javaProjects/test (another copy).java,Main,main,11,11,1

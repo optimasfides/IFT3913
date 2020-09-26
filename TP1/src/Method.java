@@ -8,6 +8,12 @@ public class Method {
     private int methode_BC;
     private int CC;
 
+    public Method(String path, String className, String methodName) {
+        this.path = path;
+        this.className = className;
+        this.methodName = methodName;
+    }
+
     public String getPath() {
         return path;
     }

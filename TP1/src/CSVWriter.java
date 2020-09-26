@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class CSVWriter {
 
+    /**
+     * Cree le fichier classes.csv
+     * @param javaFiles
+     */
     public static void recordClasses(ArrayList<JavaFile> javaFiles)  {
         List<String> header = Arrays.asList("chemin","class", "classe_LOC", "classe_CLOC", "classe_DC");
 
@@ -44,8 +48,13 @@ public class CSVWriter {
         }
     }
 
+    /**
+     * Cree le fichier methodes.csv
+     * @param javaFiles
+     */
     public static void recordMethods(ArrayList<JavaFile> javaFiles)  {
         List<String> header = Arrays.asList("chemin","class", "methode", "methode_LOC", "methode_CLOC", "methode_DC");
+
         try {
             FileWriter fileWriter = new FileWriter("methodes.csv");
             fileWriter.append(String.join(",", header));

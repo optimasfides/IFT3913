@@ -91,38 +91,48 @@ public class MetricsCalculator {
 
     /**
      *
-     * @param fichierJava
+     * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode
      */
-    public static int methode_LOC(Scanner fichierJava, String nomMethode){
+    public static int methode_LOC(File file, String nomMethode){
+        try {
+            Scanner scanner = new Scanner(file);
 
-        while (fichierJava.hasNextLine()){
-            String ligneDeCode = fichierJava.nextLine();
+            while (scanner.hasNextLine()){
+                String ligneDeCode = scanner.nextLine();
 
-            if (ligneDeCode.contains(nomMethode + "(")){
-                return compterLignes(fichierJava, ligneDeCode, 0, "{", "}", false);
+                if (ligneDeCode.contains(nomMethode + "(")){
+                    return compterLignes(scanner, ligneDeCode, 0, "{", "}", false);
+                }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return -1; //methode introuvable
+        return -1; //classe introuvable
+
     }
 
     /**
      *
-     * @param fichierJava
+     * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode qui contiennent des commentaires
      */
-    public static int methode_CLOC(Scanner fichierJava, String nomMethode){
+    public static int methode_CLOC(File file, String nomMethode){
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()){
+                String ligneDeCode = scanner.nextLine();
 
-        while (fichierJava.hasNextLine()){
-            String ligneDeCode = fichierJava.nextLine();
-
-            if (ligneDeCode.contains(nomMethode + "(")){
-                return compterLignes(fichierJava, ligneDeCode, 0, "{", "}", true);
+                if (ligneDeCode.contains(nomMethode + "(")){
+                    return compterLignes(scanner, ligneDeCode, 0, "{", "}", true);
+                }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        return -1; //methode introuvable
+        return -1; //classe introuvable
     }
 
     /**

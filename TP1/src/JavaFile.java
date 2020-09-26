@@ -12,23 +12,43 @@ public class JavaFile {
         this.path = path;
         this.file = new File(path);
         setClasses();
+        setMethods();
+    }
+
+    private void findClasses() {
+        // TODO
+    }
+
+    private void findMethods() {
+        // TODO
     }
 
     private void setClasses() {
         classes = new ArrayList<Class>();
-        // TODO detect classNames and for each class find in file do metrics
+        // TODO detect classNames auto and for each class find in file do metrics
 
         String className = "Main"; // temporary
         Class classe = new Class(getPath(), className);
-        classe.setClasse_LOC(MetricsCalculator.classe_LOC(file, className));
-        classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(file, className));
-        //System.out.println(classe.getClasse_CLOC());
-        //System.out.println(classe.getClasse_LOC());
-
+        classe.setClasse_LOC(MetricsCalculator.classe_LOC(getFile(), className));
+        classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(getFile(), className));
         classe.setClasse_DC(MetricsCalculator.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
-        //System.out.println(classe.getClasse_DC());
 
         addClass(classe);
+    }
+
+    private void setMethods() {
+        methods = new ArrayList<Method>();
+        // TODO detect methodNames auto and for each class found in file do metrics
+
+        String className = "Main"; // temporary
+        String methodName = "main"; // temporary
+
+        Method method = new Method(getPath(), className, methodName);
+        method.setMethode_LOC(MetricsCalculator.methode_LOC(getFile(), methodName));
+        method.setMethode_CLOC(MetricsCalculator.methode_CLOC(getFile(), methodName));
+        method.setMethode_DC(MetricsCalculator.classe_DC(method.getMethode_CLOC(), method.getMethode_LOC()));
+
+        addMethod(method);
     }
 
     public String getPath() {
@@ -51,8 +71,15 @@ public class JavaFile {
         return methods;
     }
 
-    public void setMethods(ArrayList<Method> methods) {
-        this.methods = methods;
+    public void addMethod(Method method) {
+        this.methods.add(method);
     }
 
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
 }

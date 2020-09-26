@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,10 +8,18 @@ SOURCES:
 [https://stackoverflow.com/questions/2056221/recursively-list-files-in-java]
  */
 
+/**
+ * Le code prenne en entree le chemin d'acces d'un dossier qui contient du code java,
+ * trouve et enregistre tous les fichiers .java, calcule les metriques du chaqu'un,
+ * ensuite produise deux fichiers au format CSV (« comma separated values», valeurs separees par des virgules).
+ */
 public class Main {
     private static String path = "javaProjects";
     private static ArrayList<JavaFile> javaFiles = new ArrayList<>();
 
+    /**
+     * Trouve et enregistre tous les fichiers .java a partir du chemin d'accès d'un dossier qui contient du code java
+     */
     private static void findJavaFiles() {
         System.out.println("Searching for .java files in the directory: '"+ path + "' ...");
 
@@ -29,6 +36,9 @@ public class Main {
         System.out.println("Finished");
     }
 
+    /**
+     * Produise deux fichiers au format CSV: classes.csv et methodes.csv
+     */
     private static void createCSVs() {
         System.out.println("Recording metric calculs...");
 
