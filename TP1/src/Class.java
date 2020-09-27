@@ -3,10 +3,10 @@ import java.util.ArrayList;
 public class Class {
     private String path;
     private String className;
-    private int classe_LOC;
-    private int classe_CLOC;
-    private int classe_DC;
-    private int classe_BC;
+    private int LOC;
+    private int CLOC;
+    private int DC;
+    private int BC;
     private int WMC;
     private ArrayList<Method> methods;
 
@@ -31,38 +31,6 @@ public class Class {
         this.className = className;
     }
 
-    public int getClasse_LOC() {
-        return classe_LOC;
-    }
-
-    public void setClasse_LOC(int classe_LOC) {
-        this.classe_LOC = classe_LOC;
-    }
-
-    public int getClasse_CLOC() {
-        return classe_CLOC;
-    }
-
-    public void setClasse_CLOC(int classe_CLOC) {
-        this.classe_CLOC = classe_CLOC;
-    }
-
-    public int getClasse_DC() {
-        return classe_DC;
-    }
-
-    public void setClasse_DC(int classe_DC) {
-        this.classe_DC = classe_DC;
-    }
-
-    public int getClasse_BC() {
-        return classe_BC;
-    }
-
-    public void setClasse_BC(int classe_BC) {
-        this.classe_BC = classe_BC;
-    }
-
     public int getWMC() {
         return WMC;
     }
@@ -77,5 +45,37 @@ public class Class {
 
     public void addMethod(Method method) {
         this.methods.add(method);
+    }
+
+    public int getLOC() {
+        return LOC;
+    }
+
+    public void setLOC(int LOC) {
+        this.LOC = LOC;
+    }
+
+    public int getCLOC() {
+        return CLOC;
+    }
+
+    public void setCLOC(int CLOC) {
+        this.CLOC = CLOC;
+    }
+
+    public int getDC() {
+        return DC;
+    }
+
+    public void setDC(int DC) {
+        this.DC = DC;
+    }
+
+    public int getBC() {
+        return BC;
+    }
+
+    public void setBC(int BC) {
+        this.BC = BC;
     }
 }

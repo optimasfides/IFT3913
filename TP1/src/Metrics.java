@@ -12,54 +12,52 @@ import java.io.File;
 public class Metrics {
 
 
-    public static int compterLignes(Scanner fichierJava, String ligneDeCode, int nbLigne, String charDebut, String charFin, boolean contientCommentaires){
+    public static int compterLignes(Scanner fichierJava, String ligneDeCode, int nbLigne, String charDebut, String charFin, boolean contientCommentaires) {
         int compteurImbrique = 0;
         do {
             if (ligneDeCode.length() == 0) { //si c'est une ligne vide on passe cette ligne
                 ligneDeCode = fichierJava.nextLine();
                 continue;
             }
-            if(contientCommentaires){ //si contientCommentaires est true, on prend en compte les commentaires
-                if(ligneDeCode.contains("//")) ligneDeCode = ligneDeCode.substring(0, ligneDeCode.indexOf("//"));
-                if(ligneDeCode.contains("/*")) {
-                    nbLigne = compterLignes(fichierJava,ligneDeCode,nbLigne,"/*","*/",false);
-                    if(fichierJava.hasNextLine()) ligneDeCode = fichierJava.nextLine();
+            if (contientCommentaires) { //si contientCommentaires est true, on prend en compte les commentaires
+                if (ligneDeCode.contains("//")) ligneDeCode = ligneDeCode.substring(0, ligneDeCode.indexOf("//"));
+                if (ligneDeCode.contains("/*")) {
+                    nbLigne = compterLignes(fichierJava, ligneDeCode, nbLigne, "/*", "*/", false);
+                    if (fichierJava.hasNextLine()) ligneDeCode = fichierJava.nextLine();
                     continue;
                 }
             }
             int index;
             while ((ligneDeCode.contains(charDebut)) || (ligneDeCode.contains(charFin))) { //dans ce while, on verifie si sur cette ligne du code on a un charactère recherché
-                if((ligneDeCode.indexOf(charDebut) < ligneDeCode.indexOf(charFin) || ligneDeCode.indexOf(charFin) == -1) && ligneDeCode.indexOf(charDebut) != -1){
+                if ((ligneDeCode.indexOf(charDebut) < ligneDeCode.indexOf(charFin) || ligneDeCode.indexOf(charFin) == -1) && ligneDeCode.indexOf(charDebut) != -1) {
                     compteurImbrique++;
                     index = ligneDeCode.indexOf(charDebut);
-                }
-                else {
+                } else {
                     compteurImbrique--;
                     index = ligneDeCode.indexOf(charFin);
                 }
                 ligneDeCode = ligneDeCode.substring(index + 1);
             }
             nbLigne++;
-            if(fichierJava.hasNextLine()) ligneDeCode = fichierJava.nextLine();
+            if (fichierJava.hasNextLine()) ligneDeCode = fichierJava.nextLine();
         }
-        while(compteurImbrique != 0);
+        while (compteurImbrique != 0);
         return nbLigne;
     }
 
     /**
-     *
      * @param file
      * @param nomClasse
-     * @return  nombre de lignes de code d’une classe
+     * @return nombre de lignes de code d’une classe
      */
-    public static int classe_LOC(File file, String nomClasse) {
+    public static int measureLOCofClass(File file, String nomClasse) {
         try {
             Scanner scanner = new Scanner(file);
 
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String ligneDeCode = scanner.nextLine();
 
-                if (ligneDeCode.contains("class " + nomClasse)){
+                if (ligneDeCode.contains("class " + nomClasse)) {
                     return compterLignes(scanner, ligneDeCode, 0, "{", "}", false);
                 }
             }
@@ -70,20 +68,19 @@ public class Metrics {
     }
 
     /**
-     *
      * @param file
      * @param nomClasse
      * @return nombre de lignes de code d’une classe qui contiennent des commentaires
      */
-    public static int classe_CLOC(File file, String nomClasse) {
+    public static int measureCLOCofClass(File file, String nomClasse) {
         try {
             Scanner scanner = new Scanner(file);
 
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String ligneDeCode = scanner.nextLine();
 
-                if (ligneDeCode.contains("class " + nomClasse)){
-                    return compterLignes(scanner, ligneDeCode, 0,  "{", "}", true);
+                if (ligneDeCode.contains("class " + nomClasse)) {
+                    return compterLignes(scanner, ligneDeCode, 0, "{", "}", true);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -93,19 +90,18 @@ public class Metrics {
     }
 
     /**
-     *
      * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode
      */
-    public static int methode_LOC(File file, String nomMethode){
+    public static int measureLOCofMethod(File file, String nomMethode) {
         try {
             Scanner scanner = new Scanner(file);
 
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String ligneDeCode = scanner.nextLine();
 
-                if (ligneDeCode.contains(nomMethode + "(")){
+                if (ligneDeCode.contains(nomMethode + "(")) {
                     return compterLignes(scanner, ligneDeCode, 0, "{", "}", false);
                 }
             }
@@ -117,18 +113,17 @@ public class Metrics {
     }
 
     /**
-     *
      * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode qui contiennent des commentaires
      */
-    public static int methode_CLOC(File file, String nomMethode){
+    public static int measureCLOCofMethod(File file, String nomMethode) {
         try {
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String ligneDeCode = scanner.nextLine();
 
-                if (ligneDeCode.contains(nomMethode + "(")){
+                if (ligneDeCode.contains(nomMethode + "(")) {
                     return compterLignes(scanner, ligneDeCode, 0, "{", "}", true);
                 }
             }
@@ -140,12 +135,13 @@ public class Metrics {
 
     /**
      * densité de commentaires pour une méthode: methode_DC= methode_CLOC/methode_LOC
+     *
      * @param methode_CLOC
      * @param methode_LOC
      * @return densité de commentaires pour une méthode: methode_DC
      */
-    public static int methode_DC(Integer methode_CLOC, Integer methode_LOC ){
-        if (methode_CLOC != -1 && methode_LOC != -1)  {
+    public static int measureDCofMethod(Integer methode_CLOC, Integer methode_LOC) {
+        if (methode_CLOC != -1 && methode_LOC != -1) {
             return methode_CLOC / methode_LOC;
         }
         return -1; //methode introuvable
@@ -153,12 +149,13 @@ public class Metrics {
 
     /**
      * densité de commentaires pour une classe: classe_DC= classe_CLOC/classe_LOC
+     *
      * @param classe_CLOC
      * @param classe_LOC
      * @return densité de commentaires pour une classe
      */
-    public static int classe_DC(Integer classe_CLOC, Integer classe_LOC ){
-        if (classe_CLOC != -1 && classe_LOC != -1)  {
+    public static int measureDCofClass(Integer classe_CLOC, Integer classe_LOC) {
+        if (classe_CLOC != -1 && classe_LOC != -1) {
             return classe_CLOC / classe_LOC;
         }
         return -1; //methode introuvable
@@ -167,18 +164,19 @@ public class Metrics {
     /**
      * Cherche tous les classes dans le fichier donnee.
      * Traite les interfaces, les énumérations et les classes abstraites comme des classes.
+     *
      * @param file
      * @return ArrayList<String> classNames
      */
-    public static ArrayList<String> findClasses(File file){
+    public static ArrayList<String> findClasses(File file) {
         ArrayList<String> classNames = new ArrayList<>();
         List<String> words;
         try {
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
-                if (line.contains(" class ")){
+                if (line.contains(" class ")) {
                     words = Arrays.asList(line.split(" "));
                     String className = words.get(1 + words.indexOf("class"));
                     if (className.contains("{")) {
@@ -211,15 +209,16 @@ public class Metrics {
 
     /**
      * Cherche tous les methodes dans le fichier donnee.
+     *
      * @param file
      * @return cArrayList<String> methodNames
      */
-    public static ArrayList<String> findMethods(File file){
+    public static ArrayList<String> findMethods(File file) {
         ArrayList<String> methodNames = new ArrayList<>();
         List<String> words;
         try {
             Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()){
+            while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
                 //TODO
@@ -232,5 +231,23 @@ public class Metrics {
         }
         return methodNames;
     }
+
+    public static void measureBCofMethod(){
+        //TODO
+    }
+
+    public static void measureBCofClass(){
+        //TODO
+    }
+
+    public static void measureCCofMethod(){
+        //TODO
+    }
+
+    public static void measureWMCofClass(){
+        //TODO
+    }
 }
+
+
 

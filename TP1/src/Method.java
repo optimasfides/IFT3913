@@ -2,10 +2,10 @@ public class Method {
     private String path;
     private String className;
     private String methodName;
-    private int methode_LOC;
-    private int methode_CLOC;
-    private int methode_DC;
-    private int methode_BC;
+    private int LOC;
+    private int CLOC;
+    private int DC;
+    private int BC;
     private int CC;
 
     public Method(String path, String className, String methodName) {
@@ -38,36 +38,36 @@ public class Method {
         this.methodName = methodName;
     }
 
-    public int getMethode_LOC() {
-        return methode_LOC;
+    public int getLOC() {
+        return LOC;
     }
 
-    public void setMethode_LOC(int methode_LOC) {
-        this.methode_LOC = methode_LOC;
+    public void setLOC(int LOC) {
+        this.LOC = LOC;
     }
 
-    public int getMethode_CLOC() {
-        return methode_CLOC;
+    public int getCLOC() {
+        return CLOC;
     }
 
-    public void setMethode_CLOC(int methode_CLOC) {
-        this.methode_CLOC = methode_CLOC;
+    public void setCLOC(int CLOC) {
+        this.CLOC = CLOC;
     }
 
-    public int getMethode_DC() {
-        return methode_DC;
+    public int getDC() {
+        return DC;
     }
 
-    public void setMethode_DC(int methode_DC) {
-        this.methode_DC = methode_DC;
+    public void setDC(int DC) {
+        this.DC = DC;
     }
 
-    public int getMethode_BC() {
-        return methode_BC;
+    public int getBC() {
+        return BC;
     }
 
-    public void setMethode_BC(int methode_BC) {
-        this.methode_BC = methode_BC;
+    public void setBC(int BC) {
+        this.BC = BC;
     }
 
     public int getCC() {

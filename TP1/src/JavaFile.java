@@ -20,11 +20,11 @@ public class JavaFile {
 
         classNames.forEach(className -> {
             Class classe = new Class(getPath(), className);
-            classe.setClasse_LOC(Metrics.classe_LOC(getFile(), className));
-            classe.setClasse_CLOC(Metrics.classe_CLOC(getFile(), className));
-            classe.setClasse_DC(Metrics.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
+            classe.setLOC(Metrics.measureLOCofClass(getFile(), className));
+            classe.setCLOC(Metrics.measureCLOCofClass(getFile(), className));
+            classe.setDC(Metrics.measureDCofClass(classe.getCLOC(), classe.getLOC()));
             classe.setWMC(0); //TODO temporary value 0
-            classe.setClasse_BC(0); //TODO temporary value 0
+            classe.setBC(0); //TODO temporary value 0
 
             addClass(classe);
         });
@@ -38,11 +38,11 @@ public class JavaFile {
         String methodName = "main"; // temporary
 
         Method method = new Method(getPath(), className, methodName);
-        method.setMethode_LOC(Metrics.methode_LOC(getFile(), methodName));
-        method.setMethode_CLOC(Metrics.methode_CLOC(getFile(), methodName));
-        method.setMethode_DC(Metrics.classe_DC(method.getMethode_CLOC(), method.getMethode_LOC()));
+        method.setLOC(Metrics.measureLOCofMethod(getFile(), methodName));
+        method.setCLOC(Metrics.measureCLOCofMethod(getFile(), methodName));
+        method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
         method.setCC(0); //TODO temporary value 0
-        method.setMethode_BC(0); //TODO temporary value 0
+        method.setBC(0); //TODO temporary value 0
 
         addMethod(method);
     }

@@ -30,11 +30,11 @@ public class CSVWriter {
                     try {
                         List<String> data = Arrays.asList(classe.getPath(),
                                 classe.getClassName(),
-                                String.valueOf(classe.getClasse_LOC()),
-                                String.valueOf(classe.getClasse_CLOC()),
-                                String.valueOf(classe.getClasse_DC()),
+                                String.valueOf(classe.getLOC()),
+                                String.valueOf(classe.getCLOC()),
+                                String.valueOf(classe.getDC()),
                                 String.valueOf(classe.getWMC()),
-                                String.valueOf(classe.getClasse_BC()));
+                                String.valueOf(classe.getBC()));
 
                         fileWriter.append(String.join(",", data));
                         fileWriter.append("\n");
@@ -72,11 +72,11 @@ public class CSVWriter {
                         List<String> data = Arrays.asList(method.getPath(),
                                 method.getClassName(),
                                 method.getMethodName(),
-                                String.valueOf(method.getMethode_LOC()),
-                                String.valueOf(method.getMethode_CLOC()),
-                                String.valueOf(method.getMethode_DC()),
+                                String.valueOf(method.getLOC()),
+                                String.valueOf(method.getCLOC()),
+                                String.valueOf(method.getDC()),
                                 String.valueOf(method.getCC()),
-                                String.valueOf(method.getMethode_BC()));
+                                String.valueOf(method.getBC()));
 
                         fileWriter.append(String.join(",", data));
                         fileWriter.append("\n");
