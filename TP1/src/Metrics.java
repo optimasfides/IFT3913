@@ -9,7 +9,7 @@ import java.io.File;
  * PARTIE 1 et 3
  * Le classe, étant donné le fichier source d'une classe java, calcule les métriques
  */
-public class MetricsCalculator {
+public class Metrics {
 
 
     public static int compterLignes(Scanner fichierJava, String ligneDeCode, int nbLigne, String charDebut, String charFin, boolean contientCommentaires){
@@ -222,14 +222,8 @@ public class MetricsCalculator {
             while (scanner.hasNextLine()){
                 String line = scanner.nextLine();
 
-                if (line.contains(" class ")){
-                    words = Arrays.asList(line.split(" "));
-                    String className = words.get(1 + words.indexOf("class"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    methodNames.add(className);
-                }
+                //TODO
+
             }
             return methodNames;
 

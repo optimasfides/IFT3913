@@ -15,14 +15,14 @@ public class JavaFile {
     }
 
     private void setClasses() {
-        classes = new ArrayList<Class>();
-        ArrayList<String> classNames = MetricsCalculator.findClasses(getFile());
+        classes = new ArrayList<>();
+        ArrayList<String> classNames = Metrics.findClasses(getFile());
 
         classNames.forEach(className -> {
             Class classe = new Class(getPath(), className);
-            classe.setClasse_LOC(MetricsCalculator.classe_LOC(getFile(), className));
-            classe.setClasse_CLOC(MetricsCalculator.classe_CLOC(getFile(), className));
-            classe.setClasse_DC(MetricsCalculator.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
+            classe.setClasse_LOC(Metrics.classe_LOC(getFile(), className));
+            classe.setClasse_CLOC(Metrics.classe_CLOC(getFile(), className));
+            classe.setClasse_DC(Metrics.classe_DC(classe.getClasse_CLOC(), classe.getClasse_LOC()));
             classe.setWMC(0); //TODO temporary value 0
             classe.setClasse_BC(0); //TODO temporary value 0
 
@@ -31,16 +31,16 @@ public class JavaFile {
     }
 
     private void setMethods() {
-        methods = new ArrayList<Method>();
+        methods = new ArrayList<>();
         // TODO detect methodNames auto and for each class found in file do metrics
 
         String className = "Main"; // temporary
         String methodName = "main"; // temporary
 
         Method method = new Method(getPath(), className, methodName);
-        method.setMethode_LOC(MetricsCalculator.methode_LOC(getFile(), methodName));
-        method.setMethode_CLOC(MetricsCalculator.methode_CLOC(getFile(), methodName));
-        method.setMethode_DC(MetricsCalculator.classe_DC(method.getMethode_CLOC(), method.getMethode_LOC()));
+        method.setMethode_LOC(Metrics.methode_LOC(getFile(), methodName));
+        method.setMethode_CLOC(Metrics.methode_CLOC(getFile(), methodName));
+        method.setMethode_DC(Metrics.classe_DC(method.getMethode_CLOC(), method.getMethode_LOC()));
         method.setCC(0); //TODO temporary value 0
         method.setMethode_BC(0); //TODO temporary value 0
 
