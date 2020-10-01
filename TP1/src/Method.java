@@ -4,8 +4,8 @@ public class Method {
     private String methodName;
     private int LOC;
     private int CLOC;
-    private int DC;
-    private int BC;
+    private float DC;
+    private float BC;
     private int CC;    // Complexité cyclomatiquede McCabe
 
     public Method(String path, String className, String methodName) {
@@ -54,19 +54,19 @@ public class Method {
         this.CLOC = CLOC;
     }
 
-    public int getDC() {
+    public float getDC() {
         return DC;
     }
 
-    public void setDC(int DC) {
+    public void setDC(float DC) {
         this.DC = DC;
     }
 
-    public int getBC() {
+    public float getBC() {
         return BC;
     }
 
-    public void setBC(int BC) {
+    public void setBC(float BC) {
         this.BC = BC;
     }
 

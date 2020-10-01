@@ -143,7 +143,7 @@ public class Metrics {
      * @param methode_LOC
      * @return densité de commentaires pour une méthode: methode_DC
      */
-    public static int measureDCofMethod(Integer methode_CLOC, Integer methode_LOC) {
+    public static float measureDCofMethod(Integer methode_CLOC, Integer methode_LOC) {
         if (methode_CLOC != -1 && methode_LOC != -1) {
             return methode_CLOC / methode_LOC;
         }
@@ -157,7 +157,7 @@ public class Metrics {
      * @param classe_LOC
      * @return densité de commentaires pour une classe
      */
-    public static int measureDCofClass(Integer classe_CLOC, Integer classe_LOC) {
+    public static float measureDCofClass(Integer classe_CLOC, Integer classe_LOC) {
         if (classe_CLOC != -1 && classe_LOC != -1) {
             return classe_CLOC / classe_LOC;
         }
@@ -235,12 +235,20 @@ public class Metrics {
         return methodNames;
     }
 
-    public static void measureBCofMethod(){
-        //TODO
+    //BC = methode_DC / CC
+    public static float measureBCofMethod(float DC, int CC) {
+        if (DC != -1 && CC != -1) {
+            return DC / CC;
+        }
+        return -1; //methode introuvable
     }
 
-    public static void measureBCofClass(){
-        //TODO
+    // classe_BC= classe_DC/ WMC
+    public static float measureBCofClass(float DC, int WMC){
+        if (DC != -1 && WMC != -1) {
+            return DC / WMC;
+        }
+        return -1; //methode introuvable
     }
 
     /**
@@ -249,7 +257,7 @@ public class Metrics {
      */
     public static int measureCCofMethod(File file, String methodName) {
         int complexity = 1;  // le chemin principal
-        Stack<Character> brackets = new Stack<>(); // cotrole des parentheses pour le debut et le fin de la methode
+        Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
 
         try {
             Scanner scanner = new Scanner(file);
@@ -266,7 +274,9 @@ public class Metrics {
                                 brackets.push('{');
                             if (line.contains("}"))
                                 brackets.pop();
-                            if (line.contains(" if") || line.contains(" while") || line.contains(" case"))
+                            if (line.contains(" if") || line.contains(" while") ||
+                                    line.contains(" case") || line.contains("else ") ||
+                                    line.contains(" default"))
                                 complexity++;
                         }
                     }

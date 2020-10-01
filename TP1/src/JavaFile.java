@@ -42,7 +42,7 @@ public class JavaFile {
         method.setCLOC(Metrics.measureCLOCofMethod(getFile(), methodName));
         method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
         method.setCC(Metrics.measureCCofMethod(getFile(), methodName));
-        method.setBC(0); //TODO temporary value 0
+        method.setBC(Metrics.measureBCofMethod(method.getDC(), method.getCC()));
 
         addMethod(method);
     }

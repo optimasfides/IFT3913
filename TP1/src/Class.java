@@ -5,8 +5,8 @@ public class Class {
     private String className;
     private int LOC;   // LOC (Lines of Code) - la mesure de nombre de Lignes de Code
     private int CLOC;  // CLOC (Comment Lines Of Code) - la mesure de lignes de code qui sont de commentaires
-    private int DC;    // DC (Density of Comments) - la mesure de la densité de commentaires
-    private int BC;
+    private float DC;    // DC (Density of Comments) - la mesure de la densité de commentaires
+    private float BC;
     private int WMC;   // WMC (Weighted Methods per Class)
     private ArrayList<Method> methods;
 
@@ -63,15 +63,15 @@ public class Class {
         this.CLOC = CLOC;
     }
 
-    public int getDC() {
+    public float getDC() {
         return DC;
     }
 
-    public void setDC(int DC) {
+    public void setDC(float DC) {
         this.DC = DC;
     }
 
-    public int getBC() {
+    public float getBC() {
         return BC;
     }
 
