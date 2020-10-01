@@ -3,11 +3,11 @@ import java.util.ArrayList;
 public class Class {
     private String path;
     private String className;
-    private int LOC;
-    private int CLOC;
-    private int DC;
+    private int LOC;   // LOC (Lines of Code) - la mesure de nombre de Lignes de Code
+    private int CLOC;  // CLOC (Comment Lines Of Code) - la mesure de lignes de code qui sont de commentaires
+    private int DC;    // DC (Density of Comments) - la mesure de la densité de commentaires
     private int BC;
-    private int WMC;
+    private int WMC;   // WMC (Weighted Methods per Class)
     private ArrayList<Method> methods;
 
     public Class(String path, String className) {

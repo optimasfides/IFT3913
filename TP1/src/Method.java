@@ -6,7 +6,7 @@ public class Method {
     private int CLOC;
     private int DC;
     private int BC;
-    private int CC;
+    private int CC;    // Complexité cyclomatiquede McCabe
 
     public Method(String path, String className, String methodName) {
         setPath(path);

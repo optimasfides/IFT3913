@@ -99,5 +99,13 @@ j
         System.out.println("nombre de lignes de code de la methode " + nomMethode + " : " + methode_LOC(sc, nomMethode));
         sc = new Scanner(file);
         System.out.println("nombre de lignes de code AVEC COMMENT de la classe " + nomClasse + " : " + classe_CLOC(sc, nomClasse));
+
+        while (fichierJava.hasNextLine()){
+            String ligneDeCode = fichierJava.nextLine();
+
+            if (ligneDeCode.contains(nomMethode + "(")){
+                return compterLignes(fichierJava, ligneDeCode, 0, "{", "}", false);
+            }
+        }
     }
 }

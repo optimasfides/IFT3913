@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 
+import java.util.*;
+
+
 /**
  * PARTIE 1 et 3
  * Le classe, étant donné le fichier source d'une classe java, calcule les métriques
@@ -240,13 +243,48 @@ public class Metrics {
         //TODO
     }
 
-    public static void measureCCofMethod(){
-        //TODO
+    /**
+     * CC - Complexité cyclomatique de McCabe
+     * Mesure du nombre de chemins linéairement indépendants
+     */
+    public static int measureCCofMethod(File file, String methodName) {
+        int complexity = 1;  // le chemin principal
+        Stack<Character> brackets = new Stack<>(); // cotrole des parentheses pour le debut et le fin de la methode
+
+        try {
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                if (line.contains(methodName)) {
+                    if (line.contains("{")) {
+                        brackets.push('{');
+                        while (scanner.hasNextLine() && !brackets.empty()) {
+                            line = scanner.nextLine();
+                            if (line.contains("{"))
+                                brackets.push('{');
+                            if (line.contains("}"))
+                                brackets.pop();
+                            if (line.contains(" if") || line.contains(" while") || line.contains(" case"))
+                                complexity++;
+                        }
+                    }
+                    return complexity;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1; // methode introuvable
     }
 
     public static void measureWMCofClass(){
         //TODO
     }
+
+
+
 }
 
 
