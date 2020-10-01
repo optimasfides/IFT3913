@@ -75,7 +75,7 @@ public class Class {
         return BC;
     }
 
-    public void setBC(int BC) {
+    public void setBC(float BC) {
         this.BC = BC;
     }
 }

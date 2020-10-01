@@ -289,8 +289,49 @@ public class Metrics {
         return -1; // methode introuvable
     }
 
-    public static void measureWMCofClass(){
-        //TODO
+    public static int measureWMCofClass(ArrayList<Method> methods) {
+        int WMC = methods.stream().mapToInt(Method::getCC).sum();
+        return WMC;
+    }
+
+    public static String extractClassName(File file) {
+        String className = "";
+        List<String> words;
+        try {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                if (line.contains(" class ")) {
+                    words = Arrays.asList(line.split(" "));
+                    className = words.get(1 + words.indexOf("class"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    return className;
+
+                } else if (line.contains(" enum ")) {
+                    words = Arrays.asList(line.split(" "));
+                    className = words.get(1 + words.indexOf("enum"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    return className;
+
+                } else if (line.contains(" interface ")) {
+                    words = Arrays.asList(line.split(" "));
+                    className = words.get(1 + words.indexOf("interface"));
+                    if (className.contains("{")) {
+                        className = className.substring(0, className.length() - 1);
+                    }
+                    return className;
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return className;
     }
 
 

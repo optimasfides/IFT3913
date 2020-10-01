@@ -25,7 +25,7 @@ public class CSVWriter {
             fileWriter.append("\n");
 
             javaFiles.forEach(javaFile -> {
-                javaFile.getClasses().forEach(classe ->
+                Class classe = javaFile.getClasse();
                 {
                     try {
                         List<String> data = Arrays.asList(classe.getPath(),
@@ -42,7 +42,7 @@ public class CSVWriter {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                });
+                }
             });
 
             fileWriter.flush();
