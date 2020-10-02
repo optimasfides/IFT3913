@@ -13,7 +13,7 @@ public class JavaFile {
         setFile(new File(path));
         setClasse(new Class(getPath(), Parser.extractClassName(getFile())));
         measureMethods();
-        //measureClass();
+        measureClass();
     }
 
     private void setClasse(Class classe) {
@@ -21,13 +21,15 @@ public class JavaFile {
     }
 
     private void measureClass() {
-
-        getClasse().setLOC(Metrics.measureLOCofClass(getFile(), getClasse().getClassName()));
-        getClasse().setCLOC(Metrics.measureCLOCofClass(getFile(), getClasse().getClassName()));
-
-        getClasse().setDC(Metrics.measureDCofClass(getClasse().getCLOC(), getClasse().getLOC()));
-        getClasse().setWMC(Metrics.measureWMCofClass(getMethods()));
-        getClasse().setBC(Metrics.measureBCofClass(getClasse().getDC(), getClasse().getWMC()));
+        try {
+            getClasse().setLOC(Metrics.measureLOCofClass(getFile(), getClasse().getClassName()));
+            getClasse().setCLOC(Metrics.measureCLOCofClass(getFile(), getClasse().getClassName()));
+            getClasse().setDC(Metrics.measureDCofClass(getClasse().getCLOC(), getClasse().getLOC()));
+            getClasse().setWMC(Metrics.measureWMCofClass(getMethods()));
+            getClasse().setBC(Metrics.measureBCofClass(getClasse().getDC(), getClasse().getWMC()));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void measureMethods() {
