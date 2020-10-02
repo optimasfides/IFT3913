@@ -1,18 +1,156 @@
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 
 import java.util.*;
 
 
+/*
+SOURCES:
+[https://www.w3schools.com/java/java_regex.asp]
+ */
+
 /**
  * PARTIE 1 et 3
  * Le classe, étant donné le fichier source d'une classe java, calcule les métriques
  */
 public class Metrics {
+
+
+    public static int measureLOCofMethod(File file, String methodName) throws FileNotFoundException {
+        int nbLines = 0;
+        Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (line.contains(methodName)) {
+                nbLines++;
+                if (line.contains("{")) {
+                    brackets.push('{');
+                    while (scanner.hasNextLine() && !brackets.empty()) {
+                        line = scanner.nextLine();
+                        if (line.contains("{"))
+                            brackets.push('{');
+                        if (line.contains("}"))
+                            brackets.pop();
+                        if (line.length() > 0)
+                            nbLines++;
+
+                        // en cas si le commentaire est imbrique en meme ligne que la ligne du code,
+                        // on double la ligne
+                        if (line.contains("//") && !line.contains("\"//\""))
+                            nbLines++;
+                    }
+                }
+            }
+        }
+
+        return nbLines;
+    }
+
+    public static int measureCLOCofMethod(File file, String methodName) throws FileNotFoundException {
+        int nbLines = 0;
+        Stack<Character> mainBrackets = new Stack<>(); // controle pour le debut et le fin de la methode
+        Stack<String> commentBrackets = new Stack<>(); // controle pour le debut et le fin des commentaires
+        Scanner scanner = new Scanner(file);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (line.contains(methodName)) {
+                if (line.contains("{")) {
+                    mainBrackets.push('{');
+                    while (scanner.hasNextLine() && !mainBrackets.empty()) {
+                        line = scanner.nextLine();
+                        if (line.contains("{"))
+                            mainBrackets.push('{');
+                        if (line.contains("}"))
+                            mainBrackets.pop();
+                        if (line.length() > 0) {
+                            if (!commentBrackets.empty()) {
+                                nbLines++;
+                            }
+                            if (line.contains("//") && !line.contains("\"//\"")) {
+                                nbLines++;
+                            }
+                            if (line.contains("/*") && !line.contains("\"/*\"")) {
+                                commentBrackets.push("/*");
+                                nbLines++;
+                            }
+                            if (line.contains("*/") && !line.contains("\"*/\"")) {
+                                commentBrackets.pop();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return nbLines;
+    }
+
+    /**
+     * densité de commentaires pour une méthode: methode_DC= methode_CLOC/methode_LOC
+     *
+     * @param CLOC
+     * @param LOC
+     * @return densité de commentaires pour une méthode: methode_DC
+     */
+    public static float measureDCofMethod(int CLOC, int LOC) {
+        if (CLOC != -1 && LOC != -1) {
+            return (float) CLOC / LOC;
+        }
+        return -1; //methode introuvable
+    }
+
+    /**
+     * CC - Complexité cyclomatique de McCabe
+     * Mesure du nombre de chemins linéairement indépendants
+     */
+    public static int measureCCofMethod(File file, String methodName) throws FileNotFoundException {
+        int complexity = 1;  // le chemin principal
+        Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
+
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                if (line.contains(methodName)) {
+                    if (line.contains("{")) {
+                        brackets.push('{');
+                        while (scanner.hasNextLine() && !brackets.empty()) {
+                            line = scanner.nextLine();
+                            if (line.contains("{"))
+                                brackets.push('{');
+                            if (line.contains("}"))
+                                brackets.pop();
+                            if (line.contains(" if") || line.contains(" while") ||
+                                    line.contains(" case") || line.contains("else ") ||
+                                    line.contains(" default"))
+                                complexity++;
+                        }
+                    }
+                    return complexity;
+                }
+            }
+        return -1;
+    }
+
+    //BC = methode_DC / CC
+    public static float measureBCofMethod(float DC, int CC) {
+        if (DC != -1 && CC != -1) {
+            return DC / CC;
+        }
+        return -1; //methode introuvable
+    }
+
+
+
+
 
 
     public static int compterLignes(Scanner fichierJava, String ligneDeCode, int nbLigne, String charDebut, String charFin, boolean contientCommentaires) {
@@ -92,11 +230,14 @@ public class Metrics {
         return -1; //classe introuvable
     }
 
+
+
     /**
      * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode
      */
+    /*
     public static int measureLOCofMethod(File file, String nomMethode) {
         try {
             Scanner scanner = new Scanner(file);
@@ -114,20 +255,23 @@ public class Metrics {
         return -1; //classe introuvable
 
     }
+    */
+
 
     /**
      * @param file
      * @param nomMethode
      * @return nombre de lignes de code d’une méthode qui contiennent des commentaires
      */
+    /*
     public static int measureCLOCofMethod(File file, String nomMethode) {
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                String ligneDeCode = scanner.nextLine();
+                String line = scanner.nextLine();
 
-                if (ligneDeCode.contains(nomMethode + "(")) {
-                    return compterLignes(scanner, ligneDeCode, 0, "{", "}", true);
+                if (line.contains(nomMethode)) {
+                    return compterLignes(scanner, line, 0, "{", "}", true);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -135,20 +279,10 @@ public class Metrics {
         }
         return -1; //classe introuvable
     }
+    */
 
-    /**
-     * densité de commentaires pour une méthode: methode_DC= methode_CLOC/methode_LOC
-     *
-     * @param methode_CLOC
-     * @param methode_LOC
-     * @return densité de commentaires pour une méthode: methode_DC
-     */
-    public static float measureDCofMethod(Integer methode_CLOC, Integer methode_LOC) {
-        if (methode_CLOC != -1 && methode_LOC != -1) {
-            return methode_CLOC / methode_LOC;
-        }
-        return -1; //methode introuvable
-    }
+
+
 
     /**
      * densité de commentaires pour une classe: classe_DC= classe_CLOC/classe_LOC
@@ -164,84 +298,7 @@ public class Metrics {
         return -1; //methode introuvable
     }
 
-    /**
-     * Cherche tous les classes dans le fichier donnee.
-     * Traite les interfaces, les énumérations et les classes abstraites comme des classes.
-     *
-     * @param file
-     * @return ArrayList<String> classNames
-     */
-    public static ArrayList<String> findClasses(File file) {
-        ArrayList<String> classNames = new ArrayList<>();
-        List<String> words;
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
 
-                if (line.contains(" class ")) {
-                    words = Arrays.asList(line.split(" "));
-                    String className = words.get(1 + words.indexOf("class"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    classNames.add(className);
-                } else if (line.contains(" enum ")) {
-                    words = Arrays.asList(line.split(" "));
-                    String className = words.get(1 + words.indexOf("enum"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    classNames.add(className);
-                } else if (line.contains(" interface ")) {
-                    words = Arrays.asList(line.split(" "));
-                    String className = words.get(1 + words.indexOf("interface"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    classNames.add(className);
-                }
-            }
-            return classNames;
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return classNames;
-    }
-
-    /**
-     * Cherche tous les methodes dans le fichier donnee.
-     *
-     * @param file
-     * @return cArrayList<String> methodNames
-     */
-    public static ArrayList<String> findMethods(File file) {
-        ArrayList<String> methodNames = new ArrayList<>();
-        List<String> words;
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                //TODO
-
-            }
-            return methodNames;
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return methodNames;
-    }
-
-    //BC = methode_DC / CC
-    public static float measureBCofMethod(float DC, int CC) {
-        if (DC != -1 && CC != -1) {
-            return DC / CC;
-        }
-        return -1; //methode introuvable
-    }
 
     // classe_BC= classe_DC/ WMC
     public static float measureBCofClass(float DC, int WMC){
@@ -251,89 +308,12 @@ public class Metrics {
         return -1; //methode introuvable
     }
 
-    /**
-     * CC - Complexité cyclomatique de McCabe
-     * Mesure du nombre de chemins linéairement indépendants
-     */
-    public static int measureCCofMethod(File file, String methodName) {
-        int complexity = 1;  // le chemin principal
-        Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
 
-        try {
-            Scanner scanner = new Scanner(file);
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                if (line.contains(methodName)) {
-                    if (line.contains("{")) {
-                        brackets.push('{');
-                        while (scanner.hasNextLine() && !brackets.empty()) {
-                            line = scanner.nextLine();
-                            if (line.contains("{"))
-                                brackets.push('{');
-                            if (line.contains("}"))
-                                brackets.pop();
-                            if (line.contains(" if") || line.contains(" while") ||
-                                    line.contains(" case") || line.contains("else ") ||
-                                    line.contains(" default"))
-                                complexity++;
-                        }
-                    }
-                    return complexity;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return -1; // methode introuvable
-    }
 
     public static int measureWMCofClass(ArrayList<Method> methods) {
         int WMC = methods.stream().mapToInt(Method::getCC).sum();
         return WMC;
     }
-
-    public static String extractClassName(File file) {
-        String className = "";
-        List<String> words;
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-
-                if (line.contains(" class ")) {
-                    words = Arrays.asList(line.split(" "));
-                    className = words.get(1 + words.indexOf("class"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    return className;
-
-                } else if (line.contains(" enum ")) {
-                    words = Arrays.asList(line.split(" "));
-                    className = words.get(1 + words.indexOf("enum"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    return className;
-
-                } else if (line.contains(" interface ")) {
-                    words = Arrays.asList(line.split(" "));
-                    className = words.get(1 + words.indexOf("interface"));
-                    if (className.contains("{")) {
-                        className = className.substring(0, className.length() - 1);
-                    }
-                    return className;
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return className;
-    }
-
 
 
 }

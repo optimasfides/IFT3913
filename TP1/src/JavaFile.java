@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class JavaFile {
@@ -10,18 +11,20 @@ public class JavaFile {
     public JavaFile(String path) {
         setPath(path);
         setFile(new File(path));
-        setClass(new Class(getPath(), Metrics.extractClassName(getFile())));
+        setClasse(new Class(getPath(), Parser.extractClassName(getFile())));
         measureMethods();
-        measureClass();
+        //measureClass();
     }
 
-    private void setClass(Class classe) {
+    private void setClasse(Class classe) {
         this.classe = classe;
     }
 
     private void measureClass() {
+
         getClasse().setLOC(Metrics.measureLOCofClass(getFile(), getClasse().getClassName()));
         getClasse().setCLOC(Metrics.measureCLOCofClass(getFile(), getClasse().getClassName()));
+
         getClasse().setDC(Metrics.measureDCofClass(getClasse().getCLOC(), getClasse().getLOC()));
         getClasse().setWMC(Metrics.measureWMCofClass(getMethods()));
         getClasse().setBC(Metrics.measureBCofClass(getClasse().getDC(), getClasse().getWMC()));
@@ -29,16 +32,19 @@ public class JavaFile {
 
     private void measureMethods() {
         methods = new ArrayList<>();
-        ArrayList<String> methodNames = Metrics.findMethods(getFile());
+        ArrayList<String> methodNames = Parser.extractMethodNames(getFile());
         methodNames.forEach(methodName -> {
-            Method method = new Method(getPath(), getClasse().getClassName(), methodName);
-            method.setLOC(Metrics.measureLOCofMethod(getFile(), methodName));
-            method.setCLOC(Metrics.measureCLOCofMethod(getFile(), methodName));
-            method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
-            method.setCC(Metrics.measureCCofMethod(getFile(), methodName));
-            method.setBC(Metrics.measureBCofMethod(method.getDC(), method.getCC()));
-
-            addMethod(method);
+            try {
+                Method method = new Method(getPath(), getClasse().getClassName(), methodName);
+                method.setLOC(Metrics.measureLOCofMethod(getFile(), methodName));
+                method.setCLOC(Metrics.measureCLOCofMethod(getFile(), methodName));
+                method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
+                method.setCC(Metrics.measureCCofMethod(getFile(), methodName));
+                method.setBC(Metrics.measureBCofMethod(method.getDC(), method.getCC()));
+                addMethod(method);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
     }
 

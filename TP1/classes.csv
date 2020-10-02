@@ -1,5 +1,2 @@
 chemin,class,classe_LOC,classe_CLOC,classe_DC,WMC,classe_BC
-javaProjects/test.java,MainTEST4,-1,-1,-1.0,0,-1.0
-javaProjects/test (copy).java,Main,76,76,1.0,0,Infinity
-javaProjects/dd/test.java,Main,76,76,1.0,0,Infinity
-javaProjects/test (another copy).java,MainTEST2,76,76,1.0,0,Infinity
+javaProjects/test.java,Metrics,0,0,0.0,0,0.0
