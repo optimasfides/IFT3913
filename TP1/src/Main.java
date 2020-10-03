@@ -30,6 +30,7 @@ public class Main {
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
                     .forEach((filePath -> {
                         if (String.valueOf(filePath).contains(".java")) {
+                            System.out.println(String.valueOf(filePath));
                             javaFiles.add(new JavaFile(String.valueOf(filePath)));
                         }
                     }));

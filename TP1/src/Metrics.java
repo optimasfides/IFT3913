@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * PARTIE 1 et 3
@@ -20,14 +22,18 @@ public class Metrics {
      * @throws FileNotFoundException si le fichier a scanner n'est trouve
      */
     public static int measureLOCofMethod(File file, String methodName) throws FileNotFoundException {
+        //TODO si le methodName contiens plus d'une ligne
         int nbLines = 0;
         Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
+        Pattern accessPattern = Pattern.compile("public | private | protected");
+        Matcher matcher;
         Scanner scanner = new Scanner(file);
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+            matcher = accessPattern.matcher(line);
 
-            if (line.contains(methodName)) {
+            if (line.contains(methodName) && matcher.find()) {
                 nbLines++;
                 if (line.contains("{")) {
                     brackets.push('{');
@@ -61,15 +67,20 @@ public class Metrics {
      * @throws FileNotFoundException si le fichier a scanner n'est trouve
      */
     public static int measureCLOCofMethod(File file, String methodName) throws FileNotFoundException {
+        //TODO si le methodName contiens plus d'une ligne
         int nbLines = 0;
         Stack<Character> mainBrackets = new Stack<>(); // controle pour le debut et le fin de la methode
         Stack<String> commentBrackets = new Stack<>(); // controle pour le debut et le fin des commentaires
+        Pattern accessPattern = Pattern.compile("public | private | protected");
+        Matcher matcher;
+
         Scanner scanner = new Scanner(file);
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+            matcher = accessPattern.matcher(line);
 
-            if (line.contains(methodName)) {
+            if (line.contains(methodName) && matcher.find()) {
                 if (line.contains("{")) {
                     mainBrackets.push('{');
                     while (scanner.hasNextLine() && !mainBrackets.empty()) {
@@ -89,7 +100,7 @@ public class Metrics {
                                 commentBrackets.push("/*");
                                 nbLines++;
                             }
-                            if (line.contains("*/") && !line.contains("\"*/\"")) {
+                            if (line.contains("*/") && !line.contains("\"*/\"") && !commentBrackets.empty()) {
                                 commentBrackets.pop();
                             }
                         }
