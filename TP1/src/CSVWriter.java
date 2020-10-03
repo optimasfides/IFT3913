@@ -13,7 +13,7 @@ public class CSVWriter {
 
     /**
      * Cree le fichier classes.csv
-     * @param javaFiles
+     * @param javaFiles tous les fichiers trouves dans le repertoire donne
      */
     public static void recordClasses(ArrayList<JavaFile> javaFiles)  {
         List<String> header = Arrays.asList("chemin","class", "classe_LOC",
@@ -54,7 +54,7 @@ public class CSVWriter {
 
     /**
      * Cree le fichier methodes.csv
-     * @param javaFiles
+     * @param javaFiles tous les fichiers trouves dans le repertoire donne
      */
     public static void recordMethods(ArrayList<JavaFile> javaFiles)  {
         List<String> header = Arrays.asList("chemin","class", "methode", "methode_LOC",
@@ -65,27 +65,25 @@ public class CSVWriter {
             fileWriter.append(String.join(",", header));
             fileWriter.append("\n");
 
-            javaFiles.forEach(javaFile -> {
-                javaFile.getMethods().forEach(method ->
-                {
-                    try {
-                        List<String> data = Arrays.asList(method.getPath(),
-                                method.getClassName(),
-                                method.getMethodName(),
-                                String.valueOf(method.getLOC()),
-                                String.valueOf(method.getCLOC()),
-                                String.valueOf(method.getDC()),
-                                String.valueOf(method.getCC()),
-                                String.valueOf(method.getBC()));
+            javaFiles.forEach(javaFile -> javaFile.getMethods().forEach(method ->
+            {
+                try {
+                    List<String> data = Arrays.asList(method.getPath(),
+                            method.getClassName(),
+                            Parser.underscoreMethodeName(method.getMethodName()),
+                            String.valueOf(method.getLOC()),
+                            String.valueOf(method.getCLOC()),
+                            String.valueOf(method.getDC()),
+                            String.valueOf(method.getCC()),
+                            String.valueOf(method.getBC()));
 
-                        fileWriter.append(String.join(",", data));
-                        fileWriter.append("\n");
+                    fileWriter.append(String.join(",", data));
+                    fileWriter.append("\n");
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
 
             fileWriter.flush();
             fileWriter.close();

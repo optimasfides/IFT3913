@@ -1,12 +1,12 @@
 public class Method {
-    private String path;
-    private String className;
-    private String methodName;
-    private int LOC;
-    private int CLOC;
-    private float DC;
-    private float BC;
-    private int CC;    // Complexité cyclomatiquede McCabe
+    private String path;        // chemin
+    private String className;   // nom de la classe
+    private String methodName;  // nom de la methode
+    private int methodLOC;   // LOC (Lines of Code) - la mesure de nombre de Lignes de Code
+    private int methodCLOC;  // CLOC (Comment Lines Of Code) - la mesure de lignes de code qui sont de commentaires
+    private float methodDC;  // DC (Density of Comments) - la mesure de la densité de commentaires
+    private float methodBC;  // degré selon lequel une méthode est bien commentée methode_BC = methode_DC / CC
+    private int methodCC;    // Complexité cyclomatiquede McCabe
 
     public Method(String path, String className, String methodName) {
         setPath(path);
@@ -39,42 +39,42 @@ public class Method {
     }
 
     public int getLOC() {
-        return LOC;
+        return methodLOC;
     }
 
     public void setLOC(int LOC) {
-        this.LOC = LOC;
+        this.methodLOC = LOC;
     }
 
     public int getCLOC() {
-        return CLOC;
+        return methodCLOC;
     }
 
     public void setCLOC(int CLOC) {
-        this.CLOC = CLOC;
+        this.methodCLOC = CLOC;
     }
 
     public float getDC() {
-        return DC;
+        return methodDC;
     }
 
     public void setDC(float DC) {
-        this.DC = DC;
+        this.methodDC = DC;
     }
 
     public float getBC() {
-        return BC;
+        return methodBC;
     }
 
     public void setBC(float BC) {
-        this.BC = BC;
+        this.methodBC = BC;
     }
 
     public int getCC() {
-        return CC;
+        return methodCC;
     }
 
     public void setCC(int CC) {
-        this.CC = CC;
+        this.methodCC = CC;
     }
 }

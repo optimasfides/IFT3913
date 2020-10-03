@@ -1,3 +1,3 @@
 chemin,class,methode,methode_LOC,methode_CLOC,methode_DC,CC,methode_BC
-javaProjects/test.java,Metrics,methodName(File file),18,4,0.22222222,3,0.074074075
-javaProjects/test.java,Metrics,measureCLOCofClass(File file, String nomClasse),15,1,0.06666667,3,0.022222223
+javaProjects/test.java,Metrics,methodName_File,18,4,0.22222222,3,0.074074075
+javaProjects/test.java,Metrics,measureCLOCofClass_File_String,15,1,0.06666667,3,0.022222223

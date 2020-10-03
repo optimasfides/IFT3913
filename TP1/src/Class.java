@@ -1,14 +1,12 @@
-import java.util.ArrayList;
 
 public class Class {
-    private String path;
-    private String className;
-    private int LOC;   // LOC (Lines of Code) - la mesure de nombre de Lignes de Code
-    private int CLOC;  // CLOC (Comment Lines Of Code) - la mesure de lignes de code qui sont de commentaires
-    private float DC;    // DC (Density of Comments) - la mesure de la densité de commentaires
-    private float BC;
-    private int WMC;   // WMC (Weighted Methods per Class)
-    private ArrayList<Method> methods;
+    private String path;        // chemin
+    private String className;   // nom de la classe
+    private int classLOC;   // LOC (Lines of Code) - la mesure de nombre de Lignes de Code
+    private int classCLOC;  // CLOC (Comment Lines Of Code) - la mesure de lignes de code qui sont de commentaires
+    private float classDC;  // DC (Density of Comments) - la mesure de la densité de commentaires
+    private float classBC;  // degré selon lequel une classe est bien commentée classe_BC = classe_DC / WMC
+    private int classWMC;   // WMC (Weighted Methods per Class)
 
     public Class(String path, String className) {
         setPath(path);
@@ -32,50 +30,42 @@ public class Class {
     }
 
     public int getWMC() {
-        return WMC;
+        return classWMC;
     }
 
     public void setWMC(int WMC) {
-        this.WMC = WMC;
-    }
-
-    public ArrayList<Method> getMethods() {
-        return methods;
-    }
-
-    public void addMethod(Method method) {
-        this.methods.add(method);
+        this.classWMC = WMC;
     }
 
     public int getLOC() {
-        return LOC;
+        return classLOC;
     }
 
     public void setLOC(int LOC) {
-        this.LOC = LOC;
+        this.classLOC = LOC;
     }
 
     public int getCLOC() {
-        return CLOC;
+        return classCLOC;
     }
 
     public void setCLOC(int CLOC) {
-        this.CLOC = CLOC;
+        this.classCLOC = CLOC;
     }
 
     public float getDC() {
-        return DC;
+        return classDC;
     }
 
     public void setDC(float DC) {
-        this.DC = DC;
+        this.classDC = DC;
     }
 
     public float getBC() {
-        return BC;
+        return classBC;
     }
 
     public void setBC(float BC) {
-        this.BC = BC;
+        this.classBC = BC;
     }
 }

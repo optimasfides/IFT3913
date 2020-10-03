@@ -2,14 +2,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
-
 import java.util.*;
-
-
-/*
-SOURCES:
-[https://www.w3schools.com/java/java_regex.asp]
- */
 
 /**
  * PARTIE 1 et 3
@@ -18,6 +11,14 @@ SOURCES:
 public class Metrics {
 
 
+    /**
+     * LOC : "Lines Of Code"
+     * Calcule le nombre de lignes de code d’une méthode
+     * @param file le fichier a scanner pour trouver la methode
+     * @param methodName le nom du methode pour laquelle il faut calculer le LOC
+     * @return LOC de la methode
+     * @throws FileNotFoundException si le fichier a scanner n'est trouve
+     */
     public static int measureLOCofMethod(File file, String methodName) throws FileNotFoundException {
         int nbLines = 0;
         Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
@@ -51,6 +52,14 @@ public class Metrics {
         return nbLines;
     }
 
+    /**
+     * CLOC : "Comment Lines Of Code"
+     * Calcule le nombre de lignes de code d’une methode qui contiennent des commentaires
+     * @param file le fichier a scanner pour trouver la methode
+     * @param methodName le nom du methode pour laquelle il faut calculer le CLOC
+     * @return CLOC de la methode
+     * @throws FileNotFoundException si le fichier a scanner n'est trouve
+     */
     public static int measureCLOCofMethod(File file, String methodName) throws FileNotFoundException {
         int nbLines = 0;
         Stack<Character> mainBrackets = new Stack<>(); // controle pour le debut et le fin de la methode
@@ -93,15 +102,15 @@ public class Metrics {
     }
 
     /**
-     * densité de commentaires pour une méthode: methode_DC= methode_CLOC/methode_LOC
-     *
-     * @param CLOC
-     * @param LOC
+     * DC : "densite de commentaire"
+     * Calcule densité de commentaires pour une méthode: methode_DC= methode_CLOC/methode_LOC
+     * @param methodCLOC "Comment Lines Of Code" de la methode donnee
+     * @param methodLOC "Lines Of Code" de la methode donnee
      * @return densité de commentaires pour une méthode: methode_DC
      */
-    public static float measureDCofMethod(int CLOC, int LOC) {
-        if (CLOC != -1 && LOC != -1) {
-            return (float) CLOC / LOC;
+    public static float measureDCofMethod(int methodCLOC, int methodLOC) {
+        if (methodCLOC != -1 && methodLOC != -1) {
+            return (float) methodCLOC / methodLOC;
         }
         return -1; //methode introuvable
     }
@@ -109,6 +118,10 @@ public class Metrics {
     /**
      * CC - Complexité cyclomatique de McCabe
      * Mesure du nombre de chemins linéairement indépendants
+     * @param file le fichier a scanner pour trouver la methode
+     * @param methodName le nom du methode pour laquelle il faut calculer le CC
+     * @return CC de la methode
+     * @throws FileNotFoundException si le fichier a scanner n'est trouve
      */
     public static int measureCCofMethod(File file, String methodName) throws FileNotFoundException {
         int complexity = 1;  // le chemin principal
@@ -140,15 +153,28 @@ public class Metrics {
         return -1;
     }
 
-    //BC = methode_DC / CC
-    public static float measureBCofMethod(float DC, int CC) {
-        if (DC != -1 && CC != -1) {
-            return DC / CC;
+    /**
+     * BC : "Bien commente"
+     * Calcule le degré selon lequel une méthode est bien commentée methode_BC = methode_DC / CC
+     * @param methodDC densité de commentaires de méthode donnee
+     * @param methodCC complexité cyclomatique de McCabe de la méthode donnee
+     * @return degré de BC
+     */
+    public static float measureBCofMethod(float methodDC, int methodCC) {
+        if (methodDC != -1 && methodCC != -1) {
+            return methodDC / methodCC;
         }
         return -1; //methode introuvable
     }
 
-    public static int measureLOCofClass(File file, String className) throws FileNotFoundException {
+    /**
+     * LOC : "Lines Of Code"
+     * Calcule le nombre de lignes de code d’une classe a partir de ligne 1 du fichier a partir de ligne 1 du fichier
+     * @param file fichier a scanner
+     * @return le nombre de LOC de la classe
+     * @throws FileNotFoundException si le fichier a scanner n'est trouve
+     */
+    public static int measureLOCofClass(File file) throws FileNotFoundException {
         int nbLines = 0;
         Scanner scanner = new Scanner(file);
 
@@ -166,7 +192,14 @@ public class Metrics {
         return nbLines;
     }
 
-    public static int measureCLOCofClass(File file, String className) throws FileNotFoundException {
+    /**
+     * CLOC : "Comment Lines Of Code"
+     * Calcule le nombre de lignes de code d’une classe qui contiennent des commentaires a partir de ligne 1 du fichier
+     * @param file le fichier a scanner
+     * @return nombre de CLOC de classe principale du fichier
+     * @throws FileNotFoundException si le fichier a scanner n'est trouve
+     */
+    public static int measureCLOCofClass(File file) throws FileNotFoundException {
         int nbLines = 0;
         Stack<String> commentBrackets = new Stack<>(); // controle pour le debut et le fin des commentaires
         Scanner scanner = new Scanner(file);
@@ -179,9 +212,9 @@ public class Metrics {
                 if (!commentBrackets.empty())
                     nbLines++;
 
-                if (line.contains("//") && !line.contains("\"//\"")) {
+                if (line.contains("//") && !line.contains("\"//\""))
                     nbLines++;
-                }
+
                 if (line.contains("/*") && !line.contains("\"/*\"") && !line.contains("/**")) {
                     commentBrackets.push("/*");
                     nbLines++;
@@ -190,9 +223,8 @@ public class Metrics {
                     commentBrackets.push("/**");
                     nbLines++;
                 }
-                if (line.contains("*/") && !line.contains("\"*/\"")) {
+                if (line.contains("*/") && !line.contains("\"*/\""))
                     commentBrackets.pop();
-                }
             }
         }
 
@@ -200,27 +232,39 @@ public class Metrics {
     }
 
     /**
-     * densité de commentaires pour une classe: classe_DC= classe_CLOC/classe_LOC
-     *
-     * @param CLOC
-     * @param LOC
+     * Calcule la densité de commentaires pour une classe: classe_DC = classe_CLOC/classe_LOC
+     * @param classCLOC "Comment Lines Of Code" d'une classe
+     * @param classLOC "Lines Of Code" d'une classe
      * @return densité de commentaires pour une classe
      */
-    public static float measureDCofClass(int CLOC, int LOC) {
-        if (CLOC != -1 && LOC != -1) {
-            return (float) CLOC / LOC;
+    public static float measureDCofClass(int classCLOC, int classLOC) {
+        if (classCLOC != -1 && classLOC != -1) {
+            return (float) classCLOC / classLOC;
         }
         return -1; //methode introuvable
     }
 
-    // classe_BC= classe_DC/ WMC
-    public static float measureBCofClass(float DC, int WMC){
-        if (DC != -1 && WMC != -1) {
-            return DC / WMC;
+
+    /**
+     * Calcule le degré selon lequel une classe est bien commentée classe_BC = classe_DC / WMC
+     * @param classDC densité de commentaires pour une classe
+     * @param classWMC « Weighted Methods per Class »
+     * @return classe_BC
+     */
+    public static float measureBCofClass(float classDC, int classWMC){
+        if (classDC != -1 && classWMC != -1) {
+            return classDC / classWMC;
         }
         return -1; //methode introuvable
     }
 
+    /**
+     * Calcule le WMC : « Weighted Methods per Class », pour chaque classe. C’est la somme pondérée des complexités
+     * des méthodes d'une classe. Si toutes les méthodes d'une classe sont de complexité 1, elle est égale au
+     * nombre de méthodes.
+     * @param methods tous les methodes de la classe
+     * @return WMC
+     */
     public static int measureWMCofClass(ArrayList<Method> methods) {
         return methods.stream().mapToInt(Method::getCC).sum();
     }

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /*
 SOURCES:
@@ -15,7 +16,7 @@ SOURCES:
  */
 public class Main {
     private static String path = "javaProjects";
-    private static ArrayList<JavaFile> javaFiles = new ArrayList<>();
+    private static final ArrayList<JavaFile> javaFiles = new ArrayList<>();
 
     /**
      * Trouve et enregistre tous les fichiers .java a partir du chemin d'accès d'un dossier qui contient du code java
@@ -35,6 +36,7 @@ public class Main {
 
         } catch (IOException e) {
             e.printStackTrace();
+            getUserInput();
         }
         System.out.println("Finished");
     }
@@ -51,7 +53,19 @@ public class Main {
         System.out.println("CSV files created for both classes.csv and methodes.csv");
     }
 
+    /**
+     * Gather user's input for path
+     */
+    private static void getUserInput() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please place the directory with java project near the exetutable file and enter it's name.");
+        path = input.nextLine();
+
+        System.out.println("Path to analyse is: " + path);
+    }
+
     public static void main(String[] args) {
+        getUserInput();
         findJavaFiles();
         createCSVs();
     }

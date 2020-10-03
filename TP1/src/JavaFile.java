@@ -20,10 +20,13 @@ public class JavaFile {
         this.classe = classe;
     }
 
+    /**
+     * Enregistre toutes les metrique de la classe principale, comme LOC, CLOC, DC, BC, WMC
+     */
     private void measureClass() {
         try {
-            getClasse().setLOC(Metrics.measureLOCofClass(getFile(), getClasse().getClassName()));
-            getClasse().setCLOC(Metrics.measureCLOCofClass(getFile(), getClasse().getClassName()));
+            getClasse().setLOC(Metrics.measureLOCofClass(getFile()));
+            getClasse().setCLOC(Metrics.measureCLOCofClass(getFile()));
             getClasse().setDC(Metrics.measureDCofClass(getClasse().getCLOC(), getClasse().getLOC()));
             getClasse().setWMC(Metrics.measureWMCofClass(getMethods()));
             getClasse().setBC(Metrics.measureBCofClass(getClasse().getDC(), getClasse().getWMC()));
@@ -32,6 +35,9 @@ public class JavaFile {
         }
     }
 
+    /**
+     * Enregistre toutes les metrique des methodes de la classe principale, comme LOC, CLOC, DC, BC, CC
+     */
     private void measureMethods() {
         methods = new ArrayList<>();
         ArrayList<String> methodNames = Parser.extractMethodNames(getFile());

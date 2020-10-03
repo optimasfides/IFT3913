@@ -1,0 +1,8 @@
+# authors    = "LANCIU, Maxim & DIAS, Alexandre"
+# id         = "20091677, 20142107"
+# date       = "9/10/2020"
+# work       = "TP 1 - Métriques"
+# cours      = "IFT3913-A-A20 - Qualité du logiciel et métriques"
+# present to = "Michalis Famelis"
+# git link   = "https://github.com/optimasfides/IFT3913"
+# version    = "1.0"
