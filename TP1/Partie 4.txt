@@ -1,25 +1,25 @@
 Classes moins bien commentées :
 
-javaProjects\chart\plot\PiePlot.java
+javaProjects\jfreechart-master\src\main\java\org\jfree\chart\plot\PiePlot.java
 LOC : 3096
 CLOC : 1491
 DC : 0.48158914
-WMC : 957
-BC : 0.00050322793
+WMC : 286
+BC : 0.0016838781
 
-javaProjects\chart\ChartPanel.java
-LOC : 2902
+javaProjects\jfreechart-master\src\main\java\org\jfree\chart\ChartPanel.java
+LOC : 2883
 CLOC : 1147
-DC : 0.39524466
-WMC : 432
-BC : 0.0009149182
+DC : 0.39784947
+WMC : 294
+BC : 00.0013532295
 
-javaProjects\chart\plot\XYPlot.java
-LOC : 5157
+javaProjects\jfreechart-master\src\main\java\org\jfree\chart\plot\XYPlot.java
+LOC : 5154
 CLOC : 2347
-DC : 0.45510957
-WMC : 350
-BC : 0.001300313
+DC : 0.45537448
+WMC : 570
+BC : 0.0007989026
 
 
 Ces classes ont un WMC élevé, ce qui peut indiquer qu'elles sont plus lourdes et moins réutilisables. 
@@ -32,29 +32,29 @@ pour ainsi augmenter BC. Un BC élevé indiquerait ainsi une classe bien comment
 
 Méthodes moins bien commentées : 
 
-javaProjects\chart\editor\DefaultPolarPlotEditor.java
-meth : createPlotTabs_Plot
-LOC : 9
-CLOC : 1
-DC : 0.11111111
-CC : 1
-BC : 0.11111111
+javaProjects\jfreechart-master\src\main\java\org\jfree\chart\editor\DefaultPlotEditor.java
+methode : updatePlotProperties_Plot
+LOC : 83
+CLOC : 2
+DC : 0.024096385
+CC : 23
+BC : 0.0010476689
 
-javaProjects\chart\JFreeChart.java
-meth : clone
-LOC : 27
-CLOC : 3
-DC : 0.11111111
-CC : 1
-BC : 0.11111111
+javaProjects\jfreechart-master\src\main\java\org\jfree\chart\axis\CategoryAxis.java
+methode : CategoryAxis
+LOC : 55
+CLOC : 1
+DC : 0.018181818
+CC : 11
+BC : 0.0016528926
 
 javaProjects\chart\ChartUtils.java
-meth : equal_double[][]_double[][]
+methode : equal_double[][]_double[][]
 LOC : 18
 CLOC : 1
 DC : 0.55555556
 CC : 5
-BC : 0.11111111
+BC : 0.011111111
 
 Ces Méthodes ont une complexité cyclomatique (CC) élevée, ce qui peut indiquer qu'elles sont plus complexes, plus lentes et moins efficaces. 
 Ainsi, la métrique BC = DC/CC est très basse puisque la densité de commentaires de ces classes n'est pas assez haute pour compenser leurs CC élevés. 
