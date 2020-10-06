@@ -22,34 +22,48 @@ public class Metrics {
      * @throws FileNotFoundException si le fichier a scanner n'est trouve
      */
     public static int measureLOCofMethod(File file, String methodName) throws FileNotFoundException {
-        //TODO si le methodName contiens plus d'une ligne
         int nbLines = 0;
         Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
         Pattern accessPattern = Pattern.compile("public | private | protected");
+        Pattern commentPattern = Pattern.compile("^//");
         Matcher matcher;
+        List<String> methodNameMultipleLines = Arrays.asList(methodName.split("\n"));
+
         Scanner scanner = new Scanner(file);
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             matcher = accessPattern.matcher(line);
 
-            if (line.contains(methodName) && matcher.find()) {
-                nbLines++;
-                if (line.contains("{")) {
-                    brackets.push('{');
-                    while (scanner.hasNextLine() && !brackets.empty()) {
-                        line = scanner.nextLine();
-                        if (line.contains("{"))
-                            brackets.push('{');
-                        if (line.contains("}"))
-                            brackets.pop();
-                        if (line.length() > 0)
-                            nbLines++;
+            if (line.contains(methodNameMultipleLines.get(0)) && matcher.find()) {
+                boolean match = true;
+                int index = 1;
+                while (scanner.hasNextLine() && index < methodNameMultipleLines.size()) {
+                    line = scanner.nextLine();
+                    if (!line.trim().contains(methodNameMultipleLines.get(index)))
+                        match = false;
+                    index++;
+                }
 
-                        // en cas si le commentaire est imbrique en meme ligne que la ligne du code,
-                        // on double la ligne
-                        if (line.contains("//") && !line.contains("\"//\""))
-                            nbLines++;
+                if (match) {
+                    nbLines += methodNameMultipleLines.size();
+                    if (line.contains("{")) {
+                        brackets.push('{');
+                        while (scanner.hasNextLine() && !brackets.empty()) {
+                            line = scanner.nextLine();
+                            if (line.contains("{"))
+                                brackets.push('{');
+                            if (line.contains("}"))
+                                brackets.pop();
+                            if (line.trim().length() > 0)
+                                nbLines++;
+
+                            // en cas si le commentaire est imbrique en meme ligne que la ligne du code,
+                            // on double la ligne
+                            matcher = commentPattern.matcher(line.trim());
+                            if (line.contains("//") && !line.contains("\"//\"") && !matcher.find())
+                                nbLines++;
+                        }
                     }
                 }
             }
@@ -67,12 +81,12 @@ public class Metrics {
      * @throws FileNotFoundException si le fichier a scanner n'est trouve
      */
     public static int measureCLOCofMethod(File file, String methodName) throws FileNotFoundException {
-        //TODO si le methodName contiens plus d'une ligne
         int nbLines = 0;
         Stack<Character> mainBrackets = new Stack<>(); // controle pour le debut et le fin de la methode
         Stack<String> commentBrackets = new Stack<>(); // controle pour le debut et le fin des commentaires
         Pattern accessPattern = Pattern.compile("public | private | protected");
         Matcher matcher;
+        List<String> methodNameMultipleLines = Arrays.asList(methodName.split("\n"));
 
         Scanner scanner = new Scanner(file);
 
@@ -80,28 +94,39 @@ public class Metrics {
             String line = scanner.nextLine();
             matcher = accessPattern.matcher(line);
 
-            if (line.contains(methodName) && matcher.find()) {
-                if (line.contains("{")) {
-                    mainBrackets.push('{');
-                    while (scanner.hasNextLine() && !mainBrackets.empty()) {
-                        line = scanner.nextLine();
-                        if (line.contains("{"))
-                            mainBrackets.push('{');
-                        if (line.contains("}"))
-                            mainBrackets.pop();
-                        if (line.length() > 0) {
-                            if (!commentBrackets.empty()) {
-                                nbLines++;
-                            }
-                            if (line.contains("//") && !line.contains("\"//\"")) {
-                                nbLines++;
-                            }
-                            if (line.contains("/*") && !line.contains("\"/*\"")) {
-                                commentBrackets.push("/*");
-                                nbLines++;
-                            }
-                            if (line.contains("*/") && !line.contains("\"*/\"") && !commentBrackets.empty()) {
-                                commentBrackets.pop();
+            if (line.contains(methodNameMultipleLines.get(0)) && matcher.find()) {
+                boolean match = true;
+                int index = 1;
+                while (scanner.hasNextLine() && index < methodNameMultipleLines.size()) {
+                    line = scanner.nextLine();
+                    if (!line.trim().contains(methodNameMultipleLines.get(index)))
+                        match = false;
+                    index++;
+                }
+
+                if (match) {
+                    if (line.contains("{")) {
+                        mainBrackets.push('{');
+                        while (scanner.hasNextLine() && !mainBrackets.empty()) {
+                            line = scanner.nextLine();
+                            if (line.contains("{"))
+                                mainBrackets.push('{');
+                            if (line.contains("}"))
+                                mainBrackets.pop();
+                            if (line.trim().length() > 0) {
+                                if (!commentBrackets.empty()) {
+                                    nbLines++;
+                                }
+                                if (line.contains("//") && !line.contains("\"//\"")) {
+                                    nbLines++;
+                                }
+                                if (line.contains("/*") && !line.contains("\"/*\"")) {
+                                    commentBrackets.push("/*");
+                                    nbLines++;
+                                }
+                                if (line.contains("*/") && !line.contains("\"*/\"") && !commentBrackets.empty()) {
+                                    commentBrackets.pop();
+                                }
                             }
                         }
                     }
@@ -123,7 +148,7 @@ public class Metrics {
         if (methodCLOC != -1 && methodLOC != -1) {
             return (float) methodCLOC / methodLOC;
         }
-        return -1; //methode introuvable
+        return 0; //methode introuvable
     }
 
     /**
@@ -138,12 +163,27 @@ public class Metrics {
         int complexity = 1;  // le chemin principal
         Stack<Character> brackets = new Stack<>(); // controle des parentheses pour le debut et le fin de la methode
 
-            Scanner scanner = new Scanner(file);
+        Pattern accessPattern = Pattern.compile("public | private | protected");
+        Matcher matcher;
+        List<String> methodNameMultipleLines = Arrays.asList(methodName.split("\n"));
 
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+        Scanner scanner = new Scanner(file);
 
-                if (line.contains(methodName)) {
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            matcher = accessPattern.matcher(line);
+
+            if (line.contains(methodNameMultipleLines.get(0)) && matcher.find()) {
+                boolean match = true;
+                int index = 1;
+                while (scanner.hasNextLine() && index < methodNameMultipleLines.size()) {
+                    line = scanner.nextLine();
+                    if (!line.trim().contains(methodNameMultipleLines.get(index)))
+                        match = false;
+                    index++;
+                }
+
+                if (match) {
                     if (line.contains("{")) {
                         brackets.push('{');
                         while (scanner.hasNextLine() && !brackets.empty()) {
@@ -161,7 +201,9 @@ public class Metrics {
                     return complexity;
                 }
             }
-        return -1;
+        }
+
+        return 1;
     }
 
     /**
@@ -175,7 +217,7 @@ public class Metrics {
         if (methodDC != -1 && methodCC != -1) {
             return methodDC / methodCC;
         }
-        return -1; //methode introuvable
+        return 0; //methode introuvable
     }
 
     /**
@@ -191,7 +233,7 @@ public class Metrics {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-                if (line.length() > 0)
+                if (line.trim().length() > 0)
                     nbLines++;
 
                 // en cas si le commentaire est imbrique en meme ligne que la ligne du code,
@@ -218,7 +260,7 @@ public class Metrics {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
 
-            if (line.length() > 0) {
+            if (line.trim().length() > 0) {
 
                 if (!commentBrackets.empty())
                     nbLines++;
@@ -252,7 +294,7 @@ public class Metrics {
         if (classCLOC != -1 && classLOC != -1) {
             return (float) classCLOC / classLOC;
         }
-        return -1; //methode introuvable
+        return 0; //methode introuvable
     }
 
 
@@ -266,7 +308,7 @@ public class Metrics {
         if (classDC != -1 && classWMC != -1) {
             return classDC / classWMC;
         }
-        return -1; //methode introuvable
+        return 0; //methode introuvable
     }
 
     /**

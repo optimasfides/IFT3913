@@ -142,10 +142,12 @@ public class Parser {
 
         words.add(methodName.substring(0, methodName.indexOf("(")));
         if (!methodName.contains("\n")) {
-            args = Arrays.asList(methodName.substring(methodName.indexOf("(") + 1, methodName.indexOf(")")).split(" "));
+            args = Arrays.asList(methodName.substring(methodName.indexOf("(") + 1,
+                    methodName.indexOf(")")).split(" "));
         } else {
             args = new ArrayList<>();
-            args2 = Arrays.asList(methodName.substring(methodName.indexOf("(") + 1, methodName.indexOf(")")).split("\n"));
+            args2 = Arrays.asList(methodName.substring(methodName.indexOf("(") + 1,
+                    methodName.indexOf(")")).split("\n"));
             args2.forEach(arg-> {
                 args.addAll(Arrays.asList(arg.split(" ")));
             });

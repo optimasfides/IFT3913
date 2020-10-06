@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +23,7 @@ public class Main {
      * Trouve et enregistre tous les fichiers .java a partir du chemin d'accès d'un dossier qui contient du code java
      */
     private static void findJavaFiles() {
-        System.out.println("Searching for .java files in the directory: '"+ path + "' ...");
+        System.out.println("Searching for .java files...");
 
         try {
             Files.find(Paths.get(path),
@@ -30,32 +31,31 @@ public class Main {
                     (filePath, fileAttr) -> fileAttr.isRegularFile())
                     .forEach((filePath -> {
                         if (String.valueOf(filePath).contains(".java")) {
-                            System.out.println(String.valueOf(filePath));
+                            System.out.println(filePath);
                             javaFiles.add(new JavaFile(String.valueOf(filePath)));
                         }
                     }));
 
         } catch (IOException e) {
             e.printStackTrace();
-            getUserInput();
         }
-        System.out.println("Finished");
+        System.out.println("Done.\n");
     }
 
     /**
      * Produise deux fichiers au format CSV: classes.csv et methodes.csv
      */
     private static void createCSVs() {
-        System.out.println("Recording metric calculs...");
-
+        System.out.println("Recording metrics...");
         CSVWriter.recordClasses(javaFiles);
         CSVWriter.recordMethods(javaFiles);
 
+        System.out.println("Done.");
         System.out.println("CSV files created for both classes.csv and methodes.csv");
     }
 
     /**
-     * Gather user's input for path
+     * Demande et enregistre le chemin de la repertoire a analyser rentre par l'utilisateur
      */
     private static void getUserInput() {
         Scanner input = new Scanner(System.in);
@@ -65,9 +65,61 @@ public class Main {
         System.out.println("Path to analyse is: " + path);
     }
 
+    /**
+     * Calculer les LOC, CLOC, DC, BC, CC, WMC des classes et des methodes
+     */
+    private static void doMetrics() {
+        System.out.println("Doing metrics...");
+        javaFiles.forEach(javaFile -> {
+            try {
+
+                ArrayList<String> methodNames = Parser.extractMethodNames(javaFile.getFile());
+                methodNames.forEach(methodName -> {
+                    try {
+                        Method method = new Method(javaFile.getPath(), javaFile.getClasse().getClassName(), methodName);
+                        method.setLOC(Metrics.measureLOCofMethod(javaFile.getFile(), methodName));
+                        method.setCLOC(Metrics.measureCLOCofMethod(javaFile.getFile(), methodName));
+                        method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
+                        method.setCC(Metrics.measureCCofMethod(javaFile.getFile(), methodName));
+                        method.setBC(Metrics.measureBCofMethod(method.getDC(), method.getCC()));
+                        javaFile.addMethod(method);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                javaFile.getClasse().setLOC(Metrics.measureLOCofClass(javaFile.getFile()));
+                javaFile.getClasse().setCLOC(Metrics.measureCLOCofClass(javaFile.getFile()));
+                javaFile.getClasse().setDC(Metrics.measureDCofClass(javaFile.getClasse().getCLOC(),
+                        javaFile.getClasse().getLOC()));
+                javaFile.getClasse().setWMC(Metrics.measureWMCofClass(javaFile.getMethods()));
+                javaFile.getClasse().setBC(Metrics.measureBCofClass(javaFile.getClasse().getDC(),
+                        javaFile.getClasse().getWMC()));
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+        System.out.println("Done.\n");
+    }
+
+    /**
+     * Cree un rapport general d'analyse
+     */
+    private static void createReport() {
+        System.out.println("Doing report...");
+        Report report = new Report(javaFiles);
+        System.out.println("Total java files: " + report.getNbJavaFiles());
+        System.out.println("Done.\n");
+        report.createReportFile();
+    }
+
     public static void main(String[] args) {
         getUserInput();
         findJavaFiles();
+        doMetrics();
+        createReport();
         createCSVs();
     }
 }

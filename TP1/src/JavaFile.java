@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class JavaFile {
@@ -12,48 +11,15 @@ public class JavaFile {
         setPath(path);
         setFile(new File(path));
         setClasse(new Class(getPath(), Parser.extractClassName(getFile())));
-        measureMethods();
-        measureClass();
+        setMethods(new ArrayList<>());
     }
 
     private void setClasse(Class classe) {
         this.classe = classe;
     }
 
-    /**
-     * Enregistre toutes les metrique de la classe principale, comme LOC, CLOC, DC, BC, WMC
-     */
-    private void measureClass() {
-        try {
-            getClasse().setLOC(Metrics.measureLOCofClass(getFile()));
-            getClasse().setCLOC(Metrics.measureCLOCofClass(getFile()));
-            getClasse().setDC(Metrics.measureDCofClass(getClasse().getCLOC(), getClasse().getLOC()));
-            getClasse().setWMC(Metrics.measureWMCofClass(getMethods()));
-            getClasse().setBC(Metrics.measureBCofClass(getClasse().getDC(), getClasse().getWMC()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Enregistre toutes les metrique des methodes de la classe principale, comme LOC, CLOC, DC, BC, CC
-     */
-    private void measureMethods() {
-        methods = new ArrayList<>();
-        ArrayList<String> methodNames = Parser.extractMethodNames(getFile());
-        methodNames.forEach(methodName -> {
-            try {
-                Method method = new Method(getPath(), getClasse().getClassName(), methodName);
-                method.setLOC(Metrics.measureLOCofMethod(getFile(), methodName));
-                method.setCLOC(Metrics.measureCLOCofMethod(getFile(), methodName));
-                method.setDC(Metrics.measureDCofMethod(method.getCLOC(), method.getLOC()));
-                method.setCC(Metrics.measureCCofMethod(getFile(), methodName));
-                method.setBC(Metrics.measureBCofMethod(method.getDC(), method.getCC()));
-                addMethod(method);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
+    private void setMethods(ArrayList<Method> methods) {
+        this.methods = methods;
     }
 
     public String getPath() {
