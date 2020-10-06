@@ -104,22 +104,10 @@ public class Main {
         System.out.println("Done.\n");
     }
 
-    /**
-     * Cree un rapport general d'analyse
-     */
-    private static void createReport() {
-        System.out.println("Doing report...");
-        Report report = new Report(javaFiles);
-        System.out.println("Total java files: " + report.getNbJavaFiles());
-        System.out.println("Done.\n");
-        report.createReportFile();
-    }
-
     public static void main(String[] args) {
         getUserInput();
         findJavaFiles();
         doMetrics();
-        createReport();
         createCSVs();
     }
 }
