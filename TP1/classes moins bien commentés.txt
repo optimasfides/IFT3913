@@ -1,0 +1,20 @@
+javaProjects\chart\plot\PiePlot.java
+LOC : 3096
+CLOC : 1491
+DC : 0.48158914
+WMC : 957
+CC : 0.00050322793
+
+javaProjects\chart\ChartPanel.java
+LOC : 2902
+CLOC : 1147
+DC : 0.39524466
+WMC : 432
+CC : 0.0009149182
+
+javaProjects\chart\plot\XYPlot.java
+LOC : 5157
+CLOC : 2347
+DC : 0.45510957
+WMC : 350
+CC : 0.001300313

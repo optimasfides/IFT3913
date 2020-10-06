@@ -1,0 +1,23 @@
+javaProjects\chart\editor\DefaultPolarPlotEditor.java
+meth : createPlotTabs_Plot
+LOC : 9
+CLOC : 1
+DC : 0.11111111
+CC : 1
+BC : 0.11111111
+
+javaProjects\chart\JFreeChart.java
+meth : clone
+LOC : 27
+CLOC : 3
+DC : 0.11111111
+CC : 1
+BC : 0.11111111
+
+javaProjects\chart\ChartUtils.java
+meth : equal_double[][]_double[][]
+LOC : 18
+CLOC : 1
+DC : 0.55555556
+CC : 5
+BC : 0.11111111
